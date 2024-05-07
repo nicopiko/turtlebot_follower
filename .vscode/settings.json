@@ -1,0 +1,22 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/nicolai/plc_ws/build/tcp_server",
+        "/home/nicolai/plc_ws/install/tcp_server/lib/python3.10/site-packages",
+        "/home/nicolai/ros2_ws/build/lds_gui",
+        "/home/nicolai/ros2_ws/install/lds_gui/lib/python3.10/site-packages",
+        "/home/nicolai/ros2_ws/build/camera_publisher",
+        "/home/nicolai/ros2_ws/install/camera_publisher/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/nicolai/plc_ws/build/tcp_server",
+        "/home/nicolai/plc_ws/install/tcp_server/lib/python3.10/site-packages",
+        "/home/nicolai/ros2_ws/build/lds_gui",
+        "/home/nicolai/ros2_ws/install/lds_gui/lib/python3.10/site-packages",
+        "/home/nicolai/ros2_ws/build/camera_publisher",
+        "/home/nicolai/ros2_ws/install/camera_publisher/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}
