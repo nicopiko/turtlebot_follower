@@ -11,7 +11,7 @@ class test(Node):
     def __init__(self):
         super().__init__("Straight_test")
 
-        self.state = 0
+        self.state = 10
         self.start_time = None
 
         self.array = []
@@ -56,6 +56,15 @@ class test(Node):
         
         if self.state == 3:
             pass
+
+        if self.state == 10:
+            move_cmd = Twist()
+            move_cmd.angular.z = 1.3
+            self.vel_pub.publish(move_cmd)
+            t.sleep(5)
+            move_cmd.angular.z = 0.0
+            self.vel_pub.publish(move_cmd)
+            self.state = 3
 
 def main():
     rclpy.init()

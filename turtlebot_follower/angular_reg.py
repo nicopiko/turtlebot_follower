@@ -10,10 +10,12 @@ class angular_reg(Node):
         self.offset_subscriber = self.create_subscription(Float32,"/offset",self.offset_callback,10)
         self.vel_pub = self.create_publisher(Twist,"/cmd_vel",10)
 
+        self.kp = 1
+
     def offset_callback(self,msg:Float32):
         move_cmd = Twist()
         offset = msg.data
-        angular_steer = 1.82 * offset
+        angular_steer = self.kp * offset
         move_cmd.angular.z = angular_steer
         self.vel_pub.publish(move_cmd)
 

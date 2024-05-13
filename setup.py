@@ -24,7 +24,10 @@ setup(
             'lidar_subscriber = turtlebot_follower.lds_subscriber:main',
             'angular_regulator = turtlebot_follower.angular_reg:main',
             'kp_tuning = turtlebot_follower.kp_tuning:main',
-            'straight_test = turtlebot_follower.straight_test:main'
+            'straight_test = turtlebot_follower.straight_test:main',
+            'move_controller = turtlebot_follower.move_controller:main',
+            'stop_move = turtlebot_follower.stop_move:main',
+            'angular_test = turtlebot_follower.angular_test:main'
         ],
     },
 )
