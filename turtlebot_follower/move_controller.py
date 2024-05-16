@@ -14,7 +14,7 @@ class move_reg(Node):
         self.steer = None
         self.drive = None
 
-        self.kp_steer = 0.5
+        self.kp_steer = 1
         
         self.kp_drive = 1
         self.ki_drive = 1
@@ -22,17 +22,20 @@ class move_reg(Node):
 
     def offset_callback(self,msg:Float32):
         offset = msg.data
-        if offset == 69.0:
-            self.steer = None
         angular_steer = self.kp_steer * offset
         self.steer = angular_steer
     
     def dist_callback(self,msg:Float32):
-        if self.steer:
+        if msg.data == 69.0:
+            move_cmd = Twist()
+            move_cmd.angular.z = 0.1
+            move_cmd.linear.x = 0.0
+            self.vel_pub.publish(move_cmd)
+        elif self.steer:
             move_cmd = Twist()
             distance = msg.data
-            error = distance - 0.7
-            self.integral_drive += error * 0.04 #sample time
+            error = distance - 0.8
+            self.integral_drive += error * 0.2 #sample time
 
             drive_cmd = self.kp_drive * error + self.ki_drive * self.integral_drive
             self.drive = -drive_cmd

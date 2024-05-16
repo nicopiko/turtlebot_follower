@@ -20,7 +20,7 @@ class lidar_gui(Node):
         angle = list(range(360))
         self.angle_rad = [radians(a) for a in angle]
 
-        self.lidar_subscriber = self.create_subscription(LaserScan,"/scan",self.lidar_callback_debug,QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT))
+        self.lidar_subscriber = self.create_subscription(LaserScan,"/scan",self.lidar_callback,QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT))
         self.center_subscriber = self.create_subscription(Float32,"/offset",self.center_callback,10)
 
         self.distance_pub = self.create_publisher(Float32,"/dist",10)
@@ -55,10 +55,13 @@ class lidar_gui(Node):
 
     def lidar_callback(self,msg:LaserScan):
         dist_msg = Float32()
-        center_deg = int((self.center - (-1)) / (1 - (-1)) * (205 - 145) + 145)
-        lds = np.array(msg.ranges)
-        distance = lds[center_deg]
-        dist_msg.data = float(distance)
+        if self.center == 69.0:
+            dist_msg.data = 69.0
+        else:
+            center_deg = int((self.center - (-1)) / (1 - (-1)) * (205 - 145) + 145)
+            lds = np.array(msg.ranges)
+            distance = lds[center_deg]
+            dist_msg.data = float(distance)
         self.distance_pub.publish(dist_msg)
   
     def center_callback(self,msg:Float32):
