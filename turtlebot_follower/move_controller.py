@@ -19,32 +19,39 @@ class move_reg(Node):
         self.kp_drive = 1
         self.ki_drive = 1
         self.integral_drive = 0
+        self.dist_reference = 0.5
 
     def offset_callback(self,msg:Float32):
         offset = msg.data
         angular_steer = self.kp_steer * offset
         self.steer = angular_steer
-    
-    def dist_callback(self,msg:Float32):
-        if msg.data == 69.0:
+        if self.steer == 69.0:
             move_cmd = Twist()
             move_cmd.angular.z = 0.1
-            move_cmd.linear.x = 0.0
             self.vel_pub.publish(move_cmd)
-        elif self.steer:
+            self.get_logger().info("Robot out of vision. Turning to scan for robot") #DEBUG
+            return
+        if self.steer != None and self.drive != None:
             move_cmd = Twist()
-            distance = msg.data
-            error = distance - 0.8
-            self.integral_drive += error * 0.2 #sample time
+            move_cmd.angular.z = self.steer
+            move_cmd.linear.x = self.drive
+            self.vel_pub.publish(move_cmd)
 
-            drive_cmd = self.kp_drive * error + self.ki_drive * self.integral_drive
-            self.drive = -drive_cmd
-            
-            if self.steer != None and self.drive != None:
-                move_cmd = Twist()
-                move_cmd.angular.z = self.steer
-                move_cmd.linear.x = self.drive
-                self.vel_pub.publish(move_cmd)
+            self.get_logger().info(f"Steer: {self.steer}. Drive: {self.drive}") #DEBUG
+    
+    def dist_callback(self,msg:Float32):    
+        distance = msg.data
+        error = distance - self.dist_reference
+        self.integral_drive += error * 0.2 #sample time
+
+        drive_cmd = self.kp_drive * error + self.ki_drive * self.integral_drive
+
+        if drive_cmd < -0.215:
+            drive_cmd = -0.215
+        if drive_cmd > 0.215:
+            drive_cmd = 0.215
+
+        self.drive = -drive_cmd
     
 
 def main():
