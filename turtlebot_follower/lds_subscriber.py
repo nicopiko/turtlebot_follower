@@ -12,7 +12,6 @@ from geometry_msgs.msg import Twist
 class lidar_gui(Node):
     def __init__(self):
         super().__init__('lidar_gui')
-        self.get_logger().info("Opening LiDAR GUI")
         self.center = 0
 
         plt.ion()
@@ -22,12 +21,12 @@ class lidar_gui(Node):
 
         self.lidar_subscriber = self.create_subscription(LaserScan,"/scan",self.lidar_callback,QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT))
         self.center_subscriber = self.create_subscription(Float32,"/offset",self.center_callback,10)
-
         self.distance_pub = self.create_publisher(Float32,"/dist",10)
 
-        self.kp = 1
-
     def lidar_callback_debug(self,msg:LaserScan):
+        self.get_logger().info(f"Center: {self.center}")
+        if self.center == 69.0:
+            return
         lds = np.array(msg.ranges)
         self.axs.clear()
         self.axs.set_theta_offset(1.5*pi)
@@ -54,6 +53,8 @@ class lidar_gui(Node):
         self.fig.canvas.flush_events()
 
     def lidar_callback(self,msg:LaserScan):
+        if self.center == 69.0:
+            return
         dist_msg = Float32()
         if self.center == 69.0:
             dist_msg.data = 69.0
