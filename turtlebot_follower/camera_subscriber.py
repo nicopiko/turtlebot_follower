@@ -21,10 +21,10 @@ class camera_subscriber(Node):
         frame = bridgeObject.imgmsg_to_cv2(msg,"bgr8")
         frame = cv2.flip(frame,1)
         hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
-        hsv = cv2.blur(hsv,(9,9))
-        lower_red = np.array([161,155,84])
-        upper_red = np.array([179,255,255])
-        thresh = cv2.inRange(hsv,lower_red,upper_red)
+        hsv = cv2.blur(hsv,(18,18))
+        lower_yellow = np.array([15, 93, 0])
+        upper_yellow = np.array([45, 255, 255])
+        thresh = cv2.inRange(hsv,lower_yellow,upper_yellow)
 
         cont, _ = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         try:
@@ -45,10 +45,10 @@ class camera_subscriber(Node):
         frame = bridgeObject.imgmsg_to_cv2(msg,"bgr8")
         frame = cv2.flip(frame,1)
         hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
-        hsv = cv2.blur(hsv,(9,9))
-        lower_red = np.array([161,155,84])
-        upper_red = np.array([179,255,255])
-        thresh = cv2.inRange(hsv,lower_red,upper_red)
+        hsv = cv2.blur(hsv,(18,18))
+        lower_yellow = np.array([15, 93, 0])
+        upper_yellow = np.array([45, 255, 255])
+        thresh = cv2.inRange(hsv,lower_yellow,upper_yellow)
 
         cont, _ = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         try:
@@ -67,8 +67,11 @@ class camera_subscriber(Node):
             self.get_logger().info("Robot out of vision")
             self.offset_publisher.publish(offset_msg)
         
+        frame = cv2.resize(frame,(640,120))
+        thresh = cv2.resize(thresh,(640,120))
         cv2.imshow("frame",frame)
         cv2.imshow("thresh",thresh)
+        cv2.imshow("hsv",hsv)
         cv2.waitKey(1)
 
 def main():
